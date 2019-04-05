@@ -29,6 +29,7 @@ public class utilidades {
             DataInputStream input;
             url = new URL(direccionURL);
             urlConn = (HttpURLConnection) url.openConnection();
+            urlConn.setConnectTimeout(5*1000);
             if (jsonParam != null) {
                 urlConn.setDoInput(true);
                 urlConn.setDoOutput(true);
@@ -47,7 +48,6 @@ public class utilidades {
                 urlConn.setRequestProperty("User-Agent","Mozilla/5.0" +
                         "(Linux; Android 1.5; es-ES) Ejemplo HTTP");
             }
-
 
             int respuesta = urlConn.getResponseCode();
 

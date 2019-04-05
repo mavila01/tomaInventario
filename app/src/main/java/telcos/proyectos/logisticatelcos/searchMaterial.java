@@ -31,12 +31,10 @@ public class searchMaterial extends AppCompatActivity implements SearchView.OnQu
     private ListView mListView;
     private EditText eBodega;
     ProgressDialog progressDialog;
-
     FloatingActionButton fab;
 
-    String descEstado;
-    String descBodega;
-
+    String descEstado = "";
+    String descBodega = "";
     ObtenerWebService hiloconexion;
 
     private static HashMap<String, Estados> estados = new HashMap<>();
@@ -45,6 +43,14 @@ public class searchMaterial extends AppCompatActivity implements SearchView.OnQu
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_search_material);
+
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+
+        Bundle bundle = getIntent().getExtras();
+        if (bundle != null) {
+            descEstado = bundle.getString("DescEstado");
+            descBodega = bundle.getString("DescBodega");
+        }
 
         mSearchView = (SearchView) findViewById(R.id.search_view);
         mListView = (ListView) findViewById(R.id.list_view);
@@ -60,11 +66,11 @@ public class searchMaterial extends AppCompatActivity implements SearchView.OnQu
         mListView.setAdapter(mListAdapter);
 
         mListView.setTextFilterEnabled(true);
+
+
         setupSearchView();
         setListViewHeightBasedOnChildren(mListView);
 
-        descEstado = getIntent().getExtras().getString("DescEstado");
-        descBodega = getIntent().getExtras().getString("DescBodega");
 
         eBodega.setText((CharSequence) descBodega);
 
@@ -146,21 +152,21 @@ public class searchMaterial extends AppCompatActivity implements SearchView.OnQu
         mSearchView.setIconifiedByDefault(false);
         mSearchView.setOnQueryTextListener(this);
         mSearchView.setSubmitButtonEnabled(true);
-        mSearchView.setQueryHint("Buscar");
+        mSearchView.setQueryHint("Buscar por codigo y material");
     }
 
     @Override
-    public boolean onQueryTextSubmit(String s) {
-        return false;
+    public boolean onQueryTextSubmit(String newText) {
+        if (!TextUtils.isEmpty(newText)) {
+            mListView.setFilterText(newText);
+        }
+        return true;
     }
 
     @Override
     public boolean onQueryTextChange(String newText) {
-
         if (TextUtils.isEmpty(newText)) {
             mListView.clearTextFilter();
-        } else {
-            mListView.setFilterText(newText);
         }
         return true;
     }
@@ -173,7 +179,7 @@ public class searchMaterial extends AppCompatActivity implements SearchView.OnQu
         @Override
         protected void onPostExecute(String s) {
 
-            Toast to = Toast.makeText(searchMaterial.this,s,Toast.LENGTH_LONG);
+            Toast to = Toast.makeText(searchMaterial.this,s,Toast.LENGTH_SHORT);
             to.show();
             progressDialog.dismiss();
             //super.onPostExecute(s);
@@ -202,13 +208,22 @@ public class searchMaterial extends AppCompatActivity implements SearchView.OnQu
 
                     JSONObject respuestaJSON = ClienteWeb(cadena,jsonParam);
 
-                    int resultJSON = respuestaJSON.getInt("estado");
+                    if (respuestaJSON != null) {
+                        int resultJSON = respuestaJSON.getInt("estado");
 
+                        switch (resultJSON) {
+                            case MainActivity.OKRESULT:
+                                devuelve = "Inventario registrado correctamente"; //Registrado Correctamente
 
-                    if (resultJSON == 1) {
-                        devuelve = "Inventario registrado correctamente"; //Registrado Correctamente
-                    } else {
-                        devuelve = "Conexion fallida"; //Conexion Fallida
+                                break;
+                            case MainActivity.ERRORRESULT:
+                                devuelve = "El inventario no se registro"; //Sin registro
+
+                                break;
+                            default:
+                                devuelve = "Conexion fallida"; //Conexion Fallida
+                                break;
+                        }
                     }
                 } catch (JSONException e) {
                     e.printStackTrace();

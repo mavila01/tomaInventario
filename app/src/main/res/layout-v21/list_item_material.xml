@@ -18,6 +18,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentStart="true"
+        android:textColor="@color/colorPrimary_text"
         android:layout_below="@+id/cmd_agregarItemSerializado"
         android:layout_marginStart="30dp" />
 
@@ -32,12 +33,9 @@
         android:id="@+id/tv_descipcion"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignLeft="@+id/tv_codigo"
         android:layout_alignStart="@+id/tv_codigo"
         android:layout_below="@+id/tv_codigo"
         android:layout_toEndOf="@id/EditTextCantidad"
-        android:layout_toLeftOf="@id/EditTextCantidad"
-        android:layout_toRightOf="@id/EditTextCantidad"
         android:layout_toStartOf="@id/EditTextCantidad"
         android:textSize="12sp" />
 
@@ -58,13 +56,15 @@
 
     <Button
         android:id="@+id/cmd_agregarItemSerializado"
+        style="@style/Widget.AppCompat.Button.Small"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignEnd="@+id/EditTextCantidad"
         android:layout_below="@+id/tv_descipcion"
         android:backgroundTint="#416ebc"
-        android:textColor="@android:color/white"
-        android:text="@string/mas" />
+
+        android:text="@string/mas"
+        android:textColor="@android:color/white" />
 
     <EditText
         android:id="@+id/serialEdit"

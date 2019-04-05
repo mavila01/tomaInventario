@@ -54,7 +54,7 @@ public class MaterialAdapter extends ArrayAdapter<Codigos> {
             holder.cantidadEditView = (EditText) convertView.findViewById(R.id.EditTextCantidad);
             //final TextView textSerial = (TextView) convertView.findViewById(R.id.textSerial);
             convertView.setTag(holder);
-        }else {
+        } else {
             holder = (ViewHolder) convertView.getTag();
         }
         final Codigos cod = getItem(position);
@@ -73,7 +73,7 @@ public class MaterialAdapter extends ArrayAdapter<Codigos> {
                             ma.getOriginal().add(position + 1,duplicado);
                             ma.clear();
                             ma.addAll(ma.getOriginal());
-                            notifyDataSetChanged();
+                            //notifyDataSetChanged();
                         } finally {
 
                         }
@@ -122,10 +122,11 @@ public class MaterialAdapter extends ArrayAdapter<Codigos> {
             }
         });
 
+
         return convertView;
     }
 
-    static class ViewHolder{
+    static class ViewHolder {
 
         private TextView codigotxView;
         private TextView descripciontxView;
@@ -140,26 +141,11 @@ public class MaterialAdapter extends ArrayAdapter<Codigos> {
         return super.getItem(position);
     }
 
-    //Agregar un Layout y Editext para serializado
-   /* public void crearText(RelativeLayout relativeLayout) {
 
-        LinearLayout linearLayout = new LinearLayout(getContext());
-        linearLayout.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT,
-                LinearLayout.LayoutParams.WRAP_CONTENT));
-        linearLayout.setOrientation(LinearLayout.HORIZONTAL);
-        linearLayout.setBackgroundColor(0xff99ccff);
-        relativeLayout.addView(linearLayout);
-
-        EditText editText1 = new EditText(getContext());
-        editText1.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT,
-                LinearLayout.LayoutParams.WRAP_CONTENT));
-        editText1.setText("TextView"+idEditxt);
-        //editText1.setBackgroundColor(0xff66ff66); // hex color 0xAARRGGBB
-        //editText1.setPadding(20,20,20,20);// in pixels (left, top, right, bottom)
-        linearLayout.addView(editText1);
-
+    public ArrayList<Codigos> getOriginal() {
+        return original;
     }
-*/
+
     @NonNull
     @Override
     public Filter getFilter() {
@@ -167,10 +153,6 @@ public class MaterialAdapter extends ArrayAdapter<Codigos> {
             filter = new MaterialesFilter();
 
         return filter;
-    }
-
-    public ArrayList<Codigos> getOriginal() {
-        return original;
     }
 
     private class MaterialesFilter extends Filter {
@@ -194,10 +176,12 @@ public class MaterialAdapter extends ArrayAdapter<Codigos> {
                 int count = list.size();
 
                 for (int i = 0; i < count; i++) {
+                    // if (results.mName.toUpperCase().contains( constraint.toString().toUpperCase() )) {}
+
                     final Codigos material = list.get(i);
                     final String value = material.toString().toLowerCase();
 
-                    if (value.contains(prefix)) {
+                    if (value.toUpperCase().contains(prefix.toUpperCase())) {
                         nlist.add(material);
                     }
                 }
@@ -210,7 +194,7 @@ public class MaterialAdapter extends ArrayAdapter<Codigos> {
         @Override
         protected void publishResults(CharSequence charSequence,FilterResults filterResults) {
             fitems = (ArrayList<Codigos>) filterResults.values;
-
+            //notifyDataSetChanged();
             clear();
             int count = fitems.size();
             for (int i = 0; i < count; i++) {

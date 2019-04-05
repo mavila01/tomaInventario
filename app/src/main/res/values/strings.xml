@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">LogisticaTelcos</string>
+    <string name="app_name">Logistica Telcos</string>
     <string name="numero_de_inventario">Numero de Inventario</string>
     <string name="consultar">Consultar</string>
     <string name="estado_material">Estado Material</string>
@@ -18,4 +18,6 @@
     <string name="guardar_digitacion">Guardar digitación</string>
     <string name="title_activity__principal">Activity_Principal</string>
     <string name="cantidad">Cantidad</string>
+    <string name="error_field_required">Este campo es requerido</string>
+    <string name="limpiar_bodega">Limpiar bodega</string>
 </resources>

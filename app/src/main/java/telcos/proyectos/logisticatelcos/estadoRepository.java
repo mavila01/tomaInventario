@@ -1,6 +1,8 @@
 package telcos.proyectos.logisticatelcos;
 
 import android.os.AsyncTask;
+import android.widget.ArrayAdapter;
+import android.widget.Spinner;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -24,7 +26,7 @@ public class estadoRepository {
     public estadoRepository() {
     }
 
-    public static void saveBodegas(Estados codes) {
+    public static void saveEstado(Estados codes) {
         estados.put(codes.getIdEstado(),codes);
     }
 
@@ -40,10 +42,10 @@ public class estadoRepository {
 
     public ArrayList<String> getRespuestas(String descEstado) {
 
-        ArrayList<String> respuestaFiltro= new ArrayList<>();
+        ArrayList<String> respuestaFiltro = new ArrayList<>();
 
-        for (Estados respuesta: estados.values()){
-            if (respuesta.getDescEstado()==descEstado){
+        for (Estados respuesta : estados.values()) {
+            if (respuesta.getDescEstado().equals(descEstado)) {
                 respuestaFiltro.add(respuesta.getIdEstado());
             }
         }
@@ -71,16 +73,14 @@ public class estadoRepository {
                     for (int i = 0; i < estadoJSON.length(); i++) {
                         idestado = estadoJSON.getJSONObject(i).getString("ESTADOMATERIALCOD");
                         descripcionestado = estadoJSON.getJSONObject(i).getString("ESTADOMATERIALDSC");
-                        saveBodegas(new Estados(idestado,descripcionestado));
+                        saveEstado(new Estados(idestado,descripcionestado));
                     }
                 }
-
-            } catch (
-                    JSONException e) {
+            } catch (JSONException e) {
                 e.printStackTrace();
             }
-
             return null;
         }
     }
+
 }

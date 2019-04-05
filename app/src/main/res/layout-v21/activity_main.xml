@@ -1,43 +1,39 @@
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
+    android:paddingTop="@dimen/activity_right_margin"
     tools:context=".MainActivity">
 
-    <!-- TODO: Update blank fragment layout -->
-
-    <TextView
+    <RelativeLayout
+        android:id="@+id/LayCodInvent"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="@string/ingresa_inventario"
-        android:textAlignment="center"
-        android:textAllCaps="false"
-        android:textColor="@color/colorPrimaryDark"
-        android:textSize="30sp"
-        android:textStyle="bold"
-        tools:ignore="MissingConstraints"
-        tools:layout_editor_absoluteX="54dp"
-        tools:layout_editor_absoluteY="0dp" />
+        android:paddingEnd="@dimen/activity_right_margin"
+        android:paddingStart="@dimen/activity_left_margin"
+        tools:ignore="UnknownId">
 
-    <LinearLayout
-        android:id="@+id/LayCodInvent"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        tools:ignore="MissingConstraints"
-        android:layout_marginEnd="15dp"
-        android:layout_marginLeft="10dp"
-        android:layout_marginRight="15dp"
-        android:layout_marginStart="10dp"
-        tools:layout_editor_absoluteX="32dp"
-        tools:layout_editor_absoluteY="70dp">
+
+        <TextView
+            android:id="@+id/titulo"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/ingresa_inventario"
+            android:textAlignment="center"
+            android:textAllCaps="false"
+            android:textColor="@color/colorPrimary_text"
+            android:textSize="30sp"
+            android:textStyle="bold"
+            tools:ignore="MissingConstraints"
+            tools:layout_editor_absoluteX="54dp"
+            tools:layout_editor_absoluteY="0dp" />
+
 
         <EditText
             android:id="@+id/editTextCodigoInv"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/titulo"
             android:ems="10"
             android:hint="@string/numero_de_inventario"
             android:inputType="number"
@@ -46,91 +42,74 @@
         <Button
             android:id="@+id/buttonConsultInve"
             style="@style/Widget.AppCompat.Button"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:backgroundTint="#201F49"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignBaseline="@+id/editTextCodigoInv"
+            android:layout_alignParentEnd="true"
+            android:backgroundTint="@color/colorAccent"
             android:text="@string/consultar"
-            android:textColor="@android:color/white" />
+            android:textColor="@color/colorIcons" />
 
-    </LinearLayout>
-
-    <LinearLayout
-        android:id="@+id/LayEstadoMat"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        tools:ignore="MissingConstraints"
-        android:layout_marginEnd="15dp"
-        android:layout_marginLeft="10dp"
-        android:layout_marginRight="15dp"
-        android:layout_marginStart="10dp"
-        android:layout_marginTop="20dp"
-        tools:layout_editor_absoluteX="32dp"
-        tools:layout_editor_absoluteY="131dp"
-        android:background="@drawable/borde">
 
         <TextView
             android:id="@+id/textEstado"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_weight="1"
-            android:ems="5"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/editTextCodigoInv"
+            android:ems="7"
+            android:paddingTop="@dimen/activity_vertical_margin"
             android:text="@string/estado_material"
+            android:textColor="@color/colorPrimary_text"
             android:textSize="18sp" />
 
         <Spinner
             android:id="@+id/spinnerEstadoMat"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_weight="1"/>
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentEnd="true"
+            android:layout_alignParentTop="true"
+            android:layout_marginEnd="41dp"
+            android:layout_marginTop="96dp"
+            android:paddingTop="@dimen/activity_vertical_margin"
+            tools:ignore="HardcodedText" />
 
-    </LinearLayout>
-
-    <LinearLayout
-        android:id="@+id/LayBodega"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginEnd="15dp"
-        android:layout_marginLeft="10dp"
-        android:layout_marginRight="15dp"
-        android:layout_marginStart="10dp"
-        android:layout_marginTop="20dp"
-        android:background="@drawable/borde"
-        android:orientation="vertical">
 
         <TextView
             android:id="@+id/textBodega"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_below="@+id/textEstado"
+            android:paddingTop="@dimen/activity_vertical_margin"
             android:text="@string/bodega"
+            android:textColor="@color/colorPrimary_text"
             android:textSize="18sp" />
 
         <AutoCompleteTextView
             android:id="@+id/spinnerBodega"
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            tools:ignore="LabelFor" />
-    </LinearLayout>
-
-    <LinearLayout
-        android:id="@+id/LayBoton"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginEnd="15dp"
-        android:layout_marginLeft="10dp"
-        android:layout_marginRight="15dp"
-        android:layout_marginStart="10dp"
-        android:layout_marginTop="30dp"
-        android:orientation="vertical">
-
-        <Button
-            android:id="@+id/buttonInventario"
-            style="@style/Widget.AppCompat.Button"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:backgroundTint="#201F49"
-            android:text="@string/digitar_inventario"
-            android:textColor="@android:color/white" />
-    </LinearLayout>
+            android:layout_below="@+id/textBodega"
+            android:paddingTop="@dimen/activity_vertical_margin" />
 
-</LinearLayout>
+        <Button
+            android:id="@+id/btLimpiarBod"
+            android:layout_width="match_parent"
+            android:layout_height="30dp"
+            android:layout_below="@+id/spinnerBodega"
+            android:background="@color/colorPrimary"
+            android:text="@string/limpiar_bodega"
+            android:textColor="@color/colorIcons" />
+
+    </RelativeLayout>
+
+    <Button
+        android:id="@+id/buttonInventario"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:background="@color/colorAccent"
+        android:text="@string/digitar_inventario"
+        android:textColor="@color/colorIcons" />
+
+</RelativeLayout>
