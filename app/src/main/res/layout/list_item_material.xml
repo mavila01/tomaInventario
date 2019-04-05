@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/Rlista"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/borde"
+    android:minHeight="?attr/listPreferredItemHeight"
+    android:orientation="vertical"
+    android:paddingBottom="8dp"
+    android:paddingLeft="@dimen/activity_horizontal_margin"
+    android:paddingRight="@dimen/activity_horizontal_margin"
+    android:paddingTop="8dp">
+
+
+    <TextView
+        android:id="@+id/textSerial"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentStart="true"
+        android:layout_below="@+id/cmd_agregarItemSerializado"
+        android:layout_marginStart="30dp" />
+
+    <TextView
+        android:id="@+id/tv_codigo"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?attr/textAppearanceListItem"
+        android:textSize="12sp" />
+
+    <TextView
+        android:id="@+id/tv_descipcion"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@+id/tv_codigo"
+        android:layout_alignStart="@+id/tv_codigo"
+        android:layout_below="@+id/tv_codigo"
+        android:layout_toEndOf="@id/EditTextCantidad"
+        android:layout_toLeftOf="@id/EditTextCantidad"
+        android:layout_toRightOf="@id/EditTextCantidad"
+        android:layout_toStartOf="@id/EditTextCantidad"
+        android:textSize="12sp" />
+
+    <EditText
+        android:id="@+id/EditTextCantidad"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentTop="true"
+        android:layout_marginEnd="23dp"
+        android:layout_marginRight="23dp"
+        android:hint="Cantidad"
+        android:inputType="number" />
+
+    <Button
+        android:id="@+id/cmd_agregarItemSerializado"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignEnd="@+id/EditTextCantidad"
+        android:layout_below="@+id/tv_descipcion"
+        android:backgroundTint="#416ebc"
+        android:textColor="@android:color/white"
+        android:text="@string/mas" />
+
+    <EditText
+        android:id="@+id/serialEdit"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignStart="@+id/tv_codigo"
+        android:layout_below="@+id/tv_descipcion"
+        android:ems="10"
+        android:hint="@string/serial"
+        android:inputType="textPersonName" />
+
+</RelativeLayout>

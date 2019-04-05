@@ -1,0 +1,21 @@
+<resources>
+    <string name="app_name">LogisticaTelcos</string>
+    <string name="numero_de_inventario">Numero de Inventario</string>
+    <string name="consultar">Consultar</string>
+    <string name="estado_material">Estado Material</string>
+    <string name="bodega">Bodega</string>
+    <string name="digitar_inventario">Digitar inventario</string>
+    <string name="codigo">Codigo</string>
+    <string name="descripcion_de_material">Descripcion de material</string>
+    <string name="cantidad_material">Cantidad</string>
+    <string name="buscar">Buscar</string>
+    <string name="informacion_personal">Informacion personal</string>
+    <string name="actualizar">Actualizar</string>
+    <string name="ingresa_inventario">Ingresa el inventario</string>
+    <string name="digitacion_de_materiales">Digitacion de materiales</string>
+    <string name="serial">Serial</string>
+    <string name="mas">+</string>
+    <string name="guardar_digitacion">Guardar digitación</string>
+    <string name="title_activity__principal">Activity_Principal</string>
+    <string name="cantidad">Cantidad</string>
+</resources>
