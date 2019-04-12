@@ -35,8 +35,8 @@
                                     <map>
                                       <entry key="assetType" value="IMAGE" />
                                       <entry key="iconShape" value="NONE" />
-                                      <entry key="imageAsset" value="C:\Users\Personal\Pictures\Logo.png" />
-                                      <entry key="outputName" value="ic_Telcos_fondo" />
+                                      <entry key="imageAsset" value="C:\Users\Personal\Desktop\icon_delete.png" />
+                                      <entry key="outputName" value="ic_delete_icon" />
                                     </map>
                                   </option>
                                 </PersistentState>

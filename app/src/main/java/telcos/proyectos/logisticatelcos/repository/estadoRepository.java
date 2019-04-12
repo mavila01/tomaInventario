@@ -1,8 +1,6 @@
-package telcos.proyectos.logisticatelcos;
+package telcos.proyectos.logisticatelcos.repository;
 
 import android.os.AsyncTask;
-import android.widget.ArrayAdapter;
-import android.widget.Spinner;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -10,9 +8,10 @@ import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 
-import static telcos.proyectos.logisticatelcos.utilidades.ClienteWeb;
+import telcos.proyectos.logisticatelcos.models.Estados;
+
+import static telcos.proyectos.logisticatelcos.connection.utilidades.ClienteWeb;
 
 public class estadoRepository {
 

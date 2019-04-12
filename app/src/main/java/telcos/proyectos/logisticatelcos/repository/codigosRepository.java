@@ -1,4 +1,4 @@
-package telcos.proyectos.logisticatelcos;
+package telcos.proyectos.logisticatelcos.repository;
 
 import android.os.AsyncTask;
 
@@ -10,7 +10,9 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
-import static telcos.proyectos.logisticatelcos.utilidades.ClienteWeb;
+import telcos.proyectos.logisticatelcos.models.Codigos;
+
+import static telcos.proyectos.logisticatelcos.connection.utilidades.ClienteWeb;
 
 public class codigosRepository {
 

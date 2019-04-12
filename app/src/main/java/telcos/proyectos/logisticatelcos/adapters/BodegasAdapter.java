@@ -1,4 +1,4 @@
-package telcos.proyectos.logisticatelcos;
+package telcos.proyectos.logisticatelcos.adapters;
 
 import android.content.Context;
 import android.support.annotation.NonNull;
@@ -11,10 +11,12 @@ import android.widget.ArrayAdapter;
 import java.util.ArrayList;
 import java.util.List;
 
-public class estadoAdapter extends ArrayAdapter<String> {
+import telcos.proyectos.logisticatelcos.R;
+
+public class BodegasAdapter extends ArrayAdapter<String> {
     public ArrayList<String> original;
 
-    public estadoAdapter(Context context,List<String> objects) {
+    public BodegasAdapter(Context context,List<String> objects) {
         super(context,0,objects);
         this.original = new ArrayList<String>(objects);
     }
@@ -33,11 +35,4 @@ public class estadoAdapter extends ArrayAdapter<String> {
 
         return convertView;
     }
-
-    @Nullable
-    @Override
-    public String getItem(int position) {
-        return super.getItem(position);
-    }
-
 }

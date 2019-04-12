@@ -1,4 +1,4 @@
-package telcos.proyectos.logisticatelcos;
+package telcos.proyectos.logisticatelcos.repository;
 
 import android.os.AsyncTask;
 
@@ -9,7 +9,9 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 import java.util.HashMap;
 
-import static telcos.proyectos.logisticatelcos.utilidades.ClienteWeb;
+import telcos.proyectos.logisticatelcos.models.Bodegas;
+
+import static telcos.proyectos.logisticatelcos.connection.utilidades.ClienteWeb;
 
 public class bodegasRepository {
 

@@ -1,4 +1,4 @@
-package telcos.proyectos.logisticatelcos;
+package telcos.proyectos.logisticatelcos.models;
 
 public class Codigos {
     private String mCod;
@@ -7,6 +7,7 @@ public class Codigos {
     private String mSerial;
     private int mIdSerial;
 
+    public Codigos(){}
     public Codigos(String mCod,String mDesc,String mCant,String mSerial,int mIdSerial) {
         this.mCod = mCod;
         this.mDesc = mDesc;
@@ -65,4 +66,5 @@ public class Codigos {
                 ", mIdSerial=" + mIdSerial +
                 '}';
     }
+
 }

@@ -1,21 +1,26 @@
-package telcos.proyectos.logisticatelcos;
+package telcos.proyectos.logisticatelcos.activities;
 
 import android.annotation.SuppressLint;
 import android.app.AlertDialog;
 import android.app.ProgressDialog;
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.RequiresApi;
 import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.Spinner;
 
 import org.json.JSONArray;
@@ -26,19 +31,26 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
-import static telcos.proyectos.logisticatelcos.config.GET_ESTADO;
-import static telcos.proyectos.logisticatelcos.config.GET_MATERIALES;
-import static telcos.proyectos.logisticatelcos.config.GET_NODO;
-import static telcos.proyectos.logisticatelcos.config.GET_PREINVENTARIO;
-import static telcos.proyectos.logisticatelcos.utilidades.ClienteWeb;
+import telcos.proyectos.logisticatelcos.R;
+import telcos.proyectos.logisticatelcos.adapters.BodegasAdapter;
+import telcos.proyectos.logisticatelcos.adapters.EstadoAdapter;
+import telcos.proyectos.logisticatelcos.repository.bodegasRepository;
+import telcos.proyectos.logisticatelcos.repository.codigosRepository;
+import telcos.proyectos.logisticatelcos.repository.estadoRepository;
+
+import static telcos.proyectos.logisticatelcos.connection.config.GET_ESTADO;
+import static telcos.proyectos.logisticatelcos.connection.config.GET_MATERIALES;
+import static telcos.proyectos.logisticatelcos.connection.config.GET_NODO;
+import static telcos.proyectos.logisticatelcos.connection.config.GET_PREINVENTARIO;
+import static telcos.proyectos.logisticatelcos.connection.utilidades.ClienteWeb;
 
 public class MainActivity extends AppCompatActivity implements View.OnClickListener {
 
-
+    private SharedPreferences prefs;
     public static EditText codigoinv;
     public Button consulta;
     public Button digitar;
-    public Button limpiarBod;
+    public ImageButton limpiarBod;
     public static Spinner spEstado;
     public static AutoCompleteTextView acBodega;
 
@@ -46,14 +58,16 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     public bodegasRepository.ObtenerBodegas hiloconexion2;
     public ObtenerInventario hiloconexion3;
 
-    bodegasAdapter listAdapter;
-    estadoAdapter listAdapter2;
+    BodegasAdapter listAdapter;
+    EstadoAdapter listAdapter2;
 
     public static Object nameEstado;
     public static Object nameBodega;
     String estadoItem = "";
     String bodegaItem = "";
+    String idEstado = "";
     public int validacion = 0;
+    int p;
 
     public static final int OKRESULT = 1;
     public static final int ERRORRESULT = 2;
@@ -68,23 +82,11 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        getSupportActionBar().setIcon(R.mipmap.ic_telcos);
+        Objects.requireNonNull(getSupportActionBar()).setIcon(R.mipmap.ic_telcos);
         getSupportActionBar().setDisplayUseLogoEnabled(true);
         getSupportActionBar().setDisplayShowHomeEnabled(true);
-
-
-        codigoinv = (EditText) findViewById(R.id.editTextCodigoInv);
-        consulta = (Button) findViewById(R.id.buttonConsultInve);
-        digitar = (Button) findViewById(R.id.buttonInventario);
-        limpiarBod = (Button) findViewById(R.id.btLimpiarBod);
-        spEstado = (Spinner) findViewById(R.id.spinnerEstadoMat);
-        acBodega = (AutoCompleteTextView) findViewById(R.id.spinnerBodega);
-        progressDialog = new ProgressDialog(MainActivity.this);
-        alertDialog = new AlertDialog.Builder(MainActivity.this).create();
-
-        consulta.setOnClickListener(this);
-        digitar.setOnClickListener(this);
-        limpiarBod.setOnClickListener(this);
+        prefs = getSharedPreferences("Preferences",Context.MODE_PRIVATE);
+        bindUI();
 
         acBodega.setHint("Buscar bodega");
         acBodega.setThreshold(1);
@@ -107,7 +109,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
                 //String m = a.getIdEstado();
                 //Log.v("Estado ",m);
-                //int p = position;
+                p = position;
+
                 nameEstado = parent.getItemAtPosition(position);
                 estadoItem = Objects.toString(id + 1,null);
 
@@ -125,6 +128,56 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             }
         });
 
+    }
+
+    private void bindUI() {
+        codigoinv = (EditText) findViewById(R.id.editTextCodigoInv);
+        consulta = (Button) findViewById(R.id.buttonConsultInve);
+        digitar = (Button) findViewById(R.id.buttonInventario);
+        limpiarBod = (ImageButton) findViewById(R.id.btLimpiarBod);
+        spEstado = (Spinner) findViewById(R.id.spinnerEstadoMat);
+        acBodega = (AutoCompleteTextView) findViewById(R.id.spinnerBodega);
+        progressDialog = new ProgressDialog(MainActivity.this);
+        alertDialog = new AlertDialog.Builder(MainActivity.this).create();
+
+        consulta.setOnClickListener(this);
+        digitar.setOnClickListener(this);
+        limpiarBod.setOnClickListener(this);
+
+
+    }
+
+
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.menu,menu);
+        return super.onCreateOptionsMenu(menu);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.menu_cerrar:
+                logOut();
+                return true;
+            case R.id.menu_olvidar:
+                removeSharedPreferences();
+                logOut();
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
+        }
+    }
+
+    private void logOut() {
+        Intent intent = new Intent(this,LoginActivity.class);
+        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+        startActivity(intent);
+    }
+
+    private void removeSharedPreferences() {
+        prefs.edit().clear().apply();
     }
 
     public void enviarValidadorCod() {
@@ -161,7 +214,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             case R.id.buttonInventario:
                 if (validacion == 1) {
 
-                    Intent i = new Intent(MainActivity.this,searchMaterial.class);
+                    Intent i = new Intent(MainActivity.this,SearchActivity.class);
                     i.putExtra("DescEstado",nameEstado.toString());
                     i.putExtra("DescBodega",nameBodega.toString());
                     startActivity(i);
@@ -187,9 +240,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 switch (s) {
                     case "No se obtuvo registro":
                         progressDialog.dismiss();
-                        alertDialog.setTitle("Alerta!");
-                        alertDialog.setMessage(s);
-                        alertDialog.show();
+                        alertas("Alerta!",s);
                         break;
                     case "1":
                         consultas();
@@ -198,28 +249,20 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                     case "0":
                         s = "El inventario no se encuentra activo";
                         progressDialog.dismiss();
-                        alertDialog.setTitle("Alerta!");
-                        alertDialog.setMessage(s);
-                        alertDialog.show();
+                        alertas("Alerta!",s);
                         break;
                     case "Se necesita un identificador":
                         progressDialog.dismiss();
-                        alertDialog.setTitle("Advertencia!");
-                        alertDialog.setMessage(s);
-                        alertDialog.show();
+                        alertas("Advertencia!",s);
                         break;
                     case "Conexion fallida":
                         progressDialog.dismiss();
-                        alertDialog.setTitle("Error!");
-                        alertDialog.setMessage(s);
-                        alertDialog.show();
+                        alertas("Error!",s);
                         break;
                 }
             } else {
                 progressDialog.dismiss();
-                alertDialog.setTitle("Alerta!");
-                alertDialog.setMessage("No se obtuvo registro");
-                alertDialog.show();
+                alertas("Alerta!","No se obtuvo registro");
             }
 
 
@@ -272,6 +315,12 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         }
     }
 
+    public void alertas(String msg,String s) {
+        alertDialog.setTitle(msg);
+        alertDialog.setMessage(s);
+        alertDialog.show();
+    }
+
     public void consultas() {
 
         hiloconexion = new estadoRepository.ObtenerEstado();
@@ -286,12 +335,12 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         String cadenallamada3 = GET_MATERIALES + "?codigo=" + codigoinv.getText().toString();
         hiloconexion3.execute(cadenallamada3);
 
-        listAdapter = new bodegasAdapter(MainActivity.this,
+        listAdapter = new BodegasAdapter(MainActivity.this,
                 bodegasRepository.getInstance().getRespuestas());
         listAdapter.setDropDownViewResource(R.layout.myspinner);
         populateSpinner(acBodega,listAdapter);
 
-        listAdapter2 = new estadoAdapter(MainActivity.this,
+        listAdapter2 = new EstadoAdapter(MainActivity.this,
                 estadoRepository.getInstance().getEstados());
         listAdapter2.setDropDownViewResource(R.layout.myspinner);
         populateSpinner2(spEstado,listAdapter2);
@@ -306,7 +355,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     }
 
-    private void populateSpinner(AutoCompleteTextView spinner,bodegasAdapter arrayList) {
+    private void populateSpinner(AutoCompleteTextView spinner,BodegasAdapter arrayList) {
         List<String> lables = new ArrayList<String>();
 
         for (int i = 0; i < arrayList.getCount(); i++) {
@@ -320,7 +369,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     }
 
-    private void populateSpinner2(Spinner spinner,estadoAdapter arrayList) {
+    private void populateSpinner2(Spinner spinner,EstadoAdapter arrayList) {
         List<String> lables = new ArrayList<String>();
 
         for (int i = 0; i < arrayList.getCount(); i++) {

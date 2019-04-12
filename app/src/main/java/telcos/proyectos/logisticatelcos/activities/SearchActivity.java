@@ -1,8 +1,9 @@
-package telcos.proyectos.logisticatelcos;
+package telcos.proyectos.logisticatelcos.activities;
 
 import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
@@ -21,11 +22,18 @@ import org.json.JSONObject;
 
 import java.util.HashMap;
 
-import static telcos.proyectos.logisticatelcos.MainActivity.codigoinv;
-import static telcos.proyectos.logisticatelcos.config.INSERT_INVENT;
-import static telcos.proyectos.logisticatelcos.utilidades.ClienteWeb;
+import telcos.proyectos.logisticatelcos.R;
+import telcos.proyectos.logisticatelcos.adapters.MaterialAdapter;
+import telcos.proyectos.logisticatelcos.models.Codigos;
+import telcos.proyectos.logisticatelcos.models.Estados;
+import telcos.proyectos.logisticatelcos.repository.codigosRepository;
 
-public class searchMaterial extends AppCompatActivity implements SearchView.OnQueryTextListener {
+import static telcos.proyectos.logisticatelcos.activities.MainActivity.codigoinv;
+import static telcos.proyectos.logisticatelcos.connection.config.INSERT_INVENT;
+import static telcos.proyectos.logisticatelcos.connection.utilidades.ClienteWeb;
+
+public class SearchActivity extends AppCompatActivity implements SearchView.OnQueryTextListener {
+
 
     private SearchView mSearchView;
     private ListView mListView;
@@ -35,6 +43,8 @@ public class searchMaterial extends AppCompatActivity implements SearchView.OnQu
 
     String descEstado = "";
     String descBodega = "";
+    int countval = 0;
+    int val = 0;
     ObtenerWebService hiloconexion;
 
     private static HashMap<String, Estados> estados = new HashMap<>();
@@ -58,9 +68,9 @@ public class searchMaterial extends AppCompatActivity implements SearchView.OnQu
 
         fab = (FloatingActionButton) findViewById(R.id.my_fab);
 
-        progressDialog = new ProgressDialog(searchMaterial.this);
+        progressDialog = new ProgressDialog(SearchActivity.this);
 
-        MaterialAdapter mListAdapter = new MaterialAdapter(searchMaterial.this,
+        MaterialAdapter mListAdapter = new MaterialAdapter(SearchActivity.this,
                 codigosRepository.getInstance().getCodigos());
 
         mListView.setAdapter(mListAdapter);
@@ -77,7 +87,7 @@ public class searchMaterial extends AppCompatActivity implements SearchView.OnQu
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                new AlertDialog.Builder(searchMaterial.this)
+                new AlertDialog.Builder(SearchActivity.this)
                         .setTitle("Confirmación")
                         .setMessage("¿Seguro desea guardar el inventario? ")
                         .setPositiveButton("SI",new DialogInterface.OnClickListener() {
@@ -91,7 +101,7 @@ public class searchMaterial extends AppCompatActivity implements SearchView.OnQu
                                     Codigos a = (Codigos) mListView.getItemAtPosition(i);
 
                                     if (!a.getmCant().equals("")) {
-
+                                        countval++;
                                         hiloconexion = new ObtenerWebService();
                                         hiloconexion.execute(INSERT_INVENT,"1",
                                                 codigoinv.getText().toString(),
@@ -152,7 +162,7 @@ public class searchMaterial extends AppCompatActivity implements SearchView.OnQu
         mSearchView.setIconifiedByDefault(false);
         mSearchView.setOnQueryTextListener(this);
         mSearchView.setSubmitButtonEnabled(true);
-        mSearchView.setQueryHint("Buscar por codigo y material");
+        mSearchView.setQueryHint("Buscar...");
     }
 
     @Override
@@ -174,15 +184,30 @@ public class searchMaterial extends AppCompatActivity implements SearchView.OnQu
     public class ObtenerWebService extends AsyncTask<String, Void, String> {
         @Override
         protected void onPreExecute() {
+            /*Intent intent = new Intent(SearchActivity.this,MainActivity.class);
+            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+            startActivity(intent);*/
         }
 
         @Override
         protected void onPostExecute(String s) {
+            val++;
+            if (val == countval) {
+                progressDialog.dismiss();
+                Intent intent = new Intent(SearchActivity.this,MainActivity.class);
+                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                startActivity(intent);
+            } else {
+                Toast to = Toast.makeText(SearchActivity.this,s,Toast.LENGTH_SHORT);
+                to.show();
+            }
 
-            Toast to = Toast.makeText(searchMaterial.this,s,Toast.LENGTH_SHORT);
-            to.show();
-            progressDialog.dismiss();
             //super.onPostExecute(s);
+        }
+
+        @Override
+        protected void onProgressUpdate(Void... values) {
+            super.onProgressUpdate(values);
         }
 
         @Override

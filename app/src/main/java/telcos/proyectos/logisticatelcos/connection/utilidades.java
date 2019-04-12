@@ -1,4 +1,4 @@
-package telcos.proyectos.logisticatelcos;
+package telcos.proyectos.logisticatelcos.connection;
 
 import org.json.JSONException;
 import org.json.JSONObject;

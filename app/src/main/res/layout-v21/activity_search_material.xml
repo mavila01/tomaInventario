@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:paddingTop="8dp"
-    tools:context=".searchMaterial">
+    tools:context=".activities.SearchActivity">
 
     <RelativeLayout
         android:id="@+id/LayMaterial"
@@ -13,9 +13,9 @@
         android:layout_height="wrap_content"
         android:layout_alignParentStart="true"
         android:layout_alignParentTop="true"
+        android:orientation="vertical"
         android:paddingEnd="@dimen/activity_right_margin"
         android:paddingStart="@dimen/activity_left_margin"
-        android:orientation="vertical"
         tools:ignore="UselessParent">
 
         <TextView
@@ -36,10 +36,10 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_below="@+id/textViewDigitar"
-            android:textColor="@color/colorPrimary_text"
             android:paddingTop="10dp"
             android:text="@string/bodega"
-            android:textAlignment="center" />
+            android:textAlignment="center"
+            android:textColor="@color/colorPrimary_text" />
 
         <EditText
             android:id="@+id/editTextBodega"
@@ -63,10 +63,12 @@
 
         </SearchView>
     </RelativeLayout>
+
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_below="@+id/LayMaterial">
+
         <ScrollView
             android:layout_width="match_parent"
             android:layout_height="match_parent"
@@ -85,9 +87,16 @@
                     tools:ignore="NestedScrolling">
 
                 </ListView>
+                <!--<android.support.v7.widget.RecyclerView
+                    android:id="@+id/recyclerView"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:scrollbars="vertical" />-->
 
             </LinearLayout>
         </ScrollView>
+
+
     </RelativeLayout>
 
 

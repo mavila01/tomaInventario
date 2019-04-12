@@ -1,4 +1,4 @@
-package telcos.proyectos.logisticatelcos;
+package telcos.proyectos.logisticatelcos.models;
 
 public class Estados {
 
@@ -14,16 +14,8 @@ public class Estados {
         return idEstado;
     }
 
-    public void setIdEstado(String idEstado) {
-        this.idEstado = idEstado;
-    }
-
     public String getDescEstado() {
         return descEstado;
-    }
-
-    public void setDescEstado(String descEstado) {
-        this.descEstado = descEstado;
     }
 
     @Override

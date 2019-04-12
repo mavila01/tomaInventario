@@ -1,7 +1,7 @@
-package telcos.proyectos.logisticatelcos;
+package telcos.proyectos.logisticatelcos.connection;
 
 public class config {
-    public static final String IP = "http://172.16.10.186";
+    public static final String IP = "http://192.168.0.17";
     public static final String PUERTO_HOST = "";
     public static final String CARPETA = "/Toma_Inventario/app/webServices";
 

@@ -1,4 +1,4 @@
-package telcos.proyectos.logisticatelcos;
+package telcos.proyectos.logisticatelcos.adapters;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
@@ -16,6 +16,9 @@ import android.widget.TextView;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import telcos.proyectos.logisticatelcos.models.Codigos;
+import telcos.proyectos.logisticatelcos.R;
 
 public class MaterialAdapter extends ArrayAdapter<Codigos> {
     private ArrayList<Codigos> original;
@@ -73,7 +76,7 @@ public class MaterialAdapter extends ArrayAdapter<Codigos> {
                             ma.getOriginal().add(position + 1,duplicado);
                             ma.clear();
                             ma.addAll(ma.getOriginal());
-                            //notifyDataSetChanged();
+                            ma.notifyDataSetChanged();
                         } finally {
 
                         }
