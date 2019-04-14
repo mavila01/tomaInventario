@@ -1,8 +1,13 @@
 package telcos.proyectos.logisticatelcos.activities;
 
+import android.animation.Animator;
+import android.animation.AnimatorListenerAdapter;
+import android.annotation.TargetApi;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.os.AsyncTask;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
@@ -12,15 +17,25 @@ import android.widget.EditText;
 import android.widget.Switch;
 import android.widget.Toast;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.net.URL;
+
 import telcos.proyectos.logisticatelcos.R;
+
+import static telcos.proyectos.logisticatelcos.connection.config.GET_USER;
+import static telcos.proyectos.logisticatelcos.connection.utilidades.ClienteWeb;
 
 public class LoginActivity extends AppCompatActivity {
 
     private SharedPreferences prefs;
     private EditText editTextUser;
     private EditText editTextPass;
-    private Switch switchRecordar;
     private Button btnIngresar;
+
+    private View mLoginFormView;
+    private View mProgressView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -35,10 +50,8 @@ public class LoginActivity extends AppCompatActivity {
             public void onClick(View view) {
                 String user = editTextUser.getText().toString();
                 String pass = editTextPass.getText().toString();
-                if (login(user,pass)) {
-                    goToMain();
-                    saveOnPreferences(user,pass);
-                }
+
+                login(user,pass);
             }
         });
     }
@@ -46,36 +59,143 @@ public class LoginActivity extends AppCompatActivity {
     private void bindUI() {
         editTextUser = (EditText) findViewById(R.id.editTextUser);
         editTextPass = (EditText) findViewById(R.id.editTextPass);
-        switchRecordar = (Switch) findViewById(R.id.switchRecordar);
         btnIngresar = (Button) findViewById(R.id.buttonIngresar);
+        mLoginFormView = findViewById(R.id.etUser);
+        mProgressView = findViewById(R.id.login_progress);
     }
 
     private void setCredentialsIfExist() {
         String user = getUserPrefs();
 
-        if (!TextUtils.isEmpty(user)){
+        if (!TextUtils.isEmpty(user)) {
             editTextUser.setText(user);
         }
     }
 
-    private boolean login(String user,String pass) {
+    private void login(String user,String pass) {
+        editTextUser.setError(null);
+        editTextPass.setError(null);
+
+
+        boolean cancel = false;
+        View focusView = null;
+
         if (!isValidUser(user)) {
-            Toast.makeText(this,"Usuario incorrecto, por favor intente de nuevo",Toast.LENGTH_SHORT).show();
-            return false;
+            editTextUser.setError("Este campo es requerido");
+            focusView = editTextUser;
+            cancel = true;
         } else if (!isValidPass(pass)) {
-            Toast.makeText(this,"Contraseña incorrecta, por favor intente de nuevo",Toast.LENGTH_SHORT).show();
-            return false;
+            editTextPass.setError("Este campo es requerido");
+            focusView = editTextPass;
+            cancel = true;
+        }
+        if (cancel) {
+            focusView.requestFocus();
         } else {
-            return true;
+            LoginTask mAuthTask = new LoginTask();
+            mAuthTask.execute(GET_USER,"1",
+                    user,
+                    pass);
+
         }
     }
 
-    private void saveOnPreferences(String user,String pass) {
-        if (switchRecordar.isChecked()) {
-            SharedPreferences.Editor editor = prefs.edit();
-            editor.putString("user",user);
-            editor.apply();
+
+    public class LoginTask extends AsyncTask<String, Void, String> {
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
         }
+
+        @Override
+        protected void onPostExecute(String s) {
+            //super.onPostExecute(s);
+
+            if (s == "Usuario Existe") {
+                goToMain();
+                showProgress(false);
+                saveOnPreferences(editTextUser.getText().toString());
+                Intent i = new Intent(LoginActivity.this,MainActivity.class);
+                i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                startActivity(i);
+            } else if (s == "Usuario No existe") {
+                Toast to = Toast.makeText(getApplicationContext(),"Usuario o clave incorrecto",Toast.LENGTH_LONG);
+                to.show();
+                showProgress(false);
+            } else {
+                Toast to = Toast.makeText(getApplicationContext(),"Verificar conexion",Toast.LENGTH_LONG);
+                to.show();
+                showProgress(false);
+            }
+
+
+        }
+
+        @Override
+        protected String doInBackground(String... params) {
+
+            String cadena = params[0];
+            URL url = null;
+            String devuelve = "";
+            if (params[1] == "1") {  //Ingresar Login
+                try {
+
+                    JSONObject jsonParam = new JSONObject();
+                    jsonParam.put("usuario",params[2]);
+                    jsonParam.put("pass",params[3]);
+
+                    JSONObject respuestaJSON = ClienteWeb(cadena,jsonParam);
+
+                    int resultJSON = respuestaJSON.getInt("estado");
+
+                    if (resultJSON == 1) {
+                        devuelve = "Usuario Existe";
+                    } else if (resultJSON == 2) {
+                        devuelve = "Usuario No existe";
+                    } else {
+                        devuelve = "Error inesperado";
+                    }
+
+
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+
+            }
+            return devuelve;
+        }
+    }
+
+    @TargetApi(Build.VERSION_CODES.HONEYCOMB_MR2)
+    private void showProgress(final boolean show) {
+
+        int shortAnimTime = getResources().getInteger(android.R.integer.config_shortAnimTime);
+
+        mLoginFormView.setVisibility(show ? View.GONE : View.VISIBLE);
+        mLoginFormView.animate().setDuration(shortAnimTime).alpha(
+                show ? 0 : 1).setListener(new AnimatorListenerAdapter() {
+            @Override
+            public void onAnimationEnd(Animator animation) {
+                mLoginFormView.setVisibility(show ? View.GONE : View.VISIBLE);
+            }
+        });
+
+        mProgressView.setVisibility(show ? View.VISIBLE : View.GONE);
+        mProgressView.animate().setDuration(shortAnimTime).alpha(
+                show ? 1 : 0).setListener(new AnimatorListenerAdapter() {
+            @Override
+            public void onAnimationEnd(Animator animation) {
+                mProgressView.setVisibility(show ? View.VISIBLE : View.GONE);
+            }
+        });
+    }
+
+    private void saveOnPreferences(String user) {
+        SharedPreferences.Editor editor = prefs.edit();
+        editor.clear();
+        editor.apply();
+        editor.putString("user",user);
+        editor.apply();
     }
 
     private boolean isValidUser(String user) {

@@ -12,6 +12,7 @@ import android.os.Bundle;
 import android.support.annotation.RequiresApi;
 import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -34,6 +35,7 @@ import java.util.Objects;
 import telcos.proyectos.logisticatelcos.R;
 import telcos.proyectos.logisticatelcos.adapters.BodegasAdapter;
 import telcos.proyectos.logisticatelcos.adapters.EstadoAdapter;
+import telcos.proyectos.logisticatelcos.models.Estados;
 import telcos.proyectos.logisticatelcos.repository.bodegasRepository;
 import telcos.proyectos.logisticatelcos.repository.codigosRepository;
 import telcos.proyectos.logisticatelcos.repository.estadoRepository;
@@ -109,12 +111,14 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
                 //String m = a.getIdEstado();
                 //Log.v("Estado ",m);
-                p = position;
-
+                p = parent.getPositionForView(view);
                 nameEstado = parent.getItemAtPosition(position);
                 estadoItem = Objects.toString(id + 1,null);
 
-                //Log.v("Estado ",nameEstado.toString());
+                ArrayList<String> a = estadoRepository.getInstance().getRespuestas(String.valueOf(nameEstado));
+
+                Log.v("Estado ",String.valueOf(a));
+
             }
 
             @Override
@@ -129,6 +133,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         });
 
     }
+
 
     private void bindUI() {
         codigoinv = (EditText) findViewById(R.id.editTextCodigoInv);
@@ -147,7 +152,11 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     }
 
-
+    @Override
+    public void onBackPressed() {
+        finish();
+        System.exit(0);
+    }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -335,6 +344,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         String cadenallamada3 = GET_MATERIALES + "?codigo=" + codigoinv.getText().toString();
         hiloconexion3.execute(cadenallamada3);
 
+        listAdapter = null;
+        listAdapter2 = null;
         listAdapter = new BodegasAdapter(MainActivity.this,
                 bodegasRepository.getInstance().getRespuestas());
         listAdapter.setDropDownViewResource(R.layout.myspinner);
@@ -354,6 +365,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
 
     }
+
 
     private void populateSpinner(AutoCompleteTextView spinner,BodegasAdapter arrayList) {
         List<String> lables = new ArrayList<String>();

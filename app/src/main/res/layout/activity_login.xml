@@ -48,16 +48,6 @@
             android:inputType="textPassword" />
 
     </android.support.design.widget.TextInputLayout>
-    <Switch
-        android:id="@+id/switchRecordar"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignEnd="@+id/etPass"
-        android:layout_alignParentBottom="true"
-        android:layout_marginBottom="214dp"
-        android:text="Recordar"
-        android:layout_alignRight="@+id/etPass" />
-
     <Button
         android:id="@+id/buttonIngresar"
         android:layout_width="215dp"
@@ -66,4 +56,13 @@
         android:layout_centerHorizontal="true"
         android:layout_marginBottom="136dp"
         android:text="Ingresar" />
+
+    <!-- Login progress -->
+    <ProgressBar
+        android:id="@+id/login_progress"
+        style="?android:attr/progressBarStyleLarge"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="8dp"
+        android:visibility="gone" />
 </RelativeLayout>

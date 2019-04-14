@@ -2,8 +2,10 @@ package telcos.proyectos.logisticatelcos.activities;
 
 import android.app.AlertDialog;
 import android.app.ProgressDialog;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
@@ -23,7 +25,7 @@ import org.json.JSONObject;
 import java.util.HashMap;
 
 import telcos.proyectos.logisticatelcos.R;
-import telcos.proyectos.logisticatelcos.adapters.MaterialAdapter;
+import telcos.proyectos.logisticatelcos.adapters.CodigosAdapter;
 import telcos.proyectos.logisticatelcos.models.Codigos;
 import telcos.proyectos.logisticatelcos.models.Estados;
 import telcos.proyectos.logisticatelcos.repository.codigosRepository;
@@ -34,6 +36,7 @@ import static telcos.proyectos.logisticatelcos.connection.utilidades.ClienteWeb;
 
 public class SearchActivity extends AppCompatActivity implements SearchView.OnQueryTextListener {
 
+    private SharedPreferences prefs;
 
     private SearchView mSearchView;
     private ListView mListView;
@@ -61,7 +64,7 @@ public class SearchActivity extends AppCompatActivity implements SearchView.OnQu
             descEstado = bundle.getString("DescEstado");
             descBodega = bundle.getString("DescBodega");
         }
-
+        prefs = getSharedPreferences("Preferences",Context.MODE_PRIVATE);
         mSearchView = (SearchView) findViewById(R.id.search_view);
         mListView = (ListView) findViewById(R.id.list_view);
         eBodega = (EditText) findViewById(R.id.editTextBodega);
@@ -70,7 +73,7 @@ public class SearchActivity extends AppCompatActivity implements SearchView.OnQu
 
         progressDialog = new ProgressDialog(SearchActivity.this);
 
-        MaterialAdapter mListAdapter = new MaterialAdapter(SearchActivity.this,
+        CodigosAdapter mListAdapter = new CodigosAdapter(SearchActivity.this,
                 codigosRepository.getInstance().getCodigos());
 
         mListView.setAdapter(mListAdapter);
@@ -80,7 +83,6 @@ public class SearchActivity extends AppCompatActivity implements SearchView.OnQu
 
         setupSearchView();
         setListViewHeightBasedOnChildren(mListView);
-
 
         eBodega.setText((CharSequence) descBodega);
 
@@ -113,7 +115,7 @@ public class SearchActivity extends AppCompatActivity implements SearchView.OnQu
                                                 String.valueOf(a.getmCant()),
                                                 descEstado,
                                                 descEstado,//Id estado
-                                                "Usuario de prueba"
+                                                setCredentialsIfExist()
                                         );
                                     }
                                 }
@@ -259,5 +261,19 @@ public class SearchActivity extends AppCompatActivity implements SearchView.OnQu
 
             return null;
         }
+    }
+
+    private String getUserPrefs() {
+        return prefs.getString("user","");
+    }
+
+    private String setCredentialsIfExist() {
+        String user = getUserPrefs();
+        if(TextUtils.isEmpty(user)){
+            return user;
+        }else{
+            return "";
+        }
+
     }
 }

@@ -20,13 +20,13 @@ import java.util.List;
 import telcos.proyectos.logisticatelcos.models.Codigos;
 import telcos.proyectos.logisticatelcos.R;
 
-public class MaterialAdapter extends ArrayAdapter<Codigos> {
+public class CodigosAdapter extends ArrayAdapter<Codigos> {
     private ArrayList<Codigos> original;
     private ArrayList<Codigos> fitems;
     private Filter filter;
     // private int idEditxt= 0;
 
-    public MaterialAdapter(Context context,List<Codigos> objects) {
+    public CodigosAdapter(Context context,List<Codigos> objects) {
         super(context,0,objects);
         this.original = new ArrayList<Codigos>(objects);
         this.fitems = new ArrayList<Codigos>(objects);
@@ -71,7 +71,7 @@ public class MaterialAdapter extends ArrayAdapter<Codigos> {
                         //this.original.add(position+1,cod);
 
                         try {
-                            MaterialAdapter ma = ((MaterialAdapter) ((ListView) view.getParent().getParent()).getAdapter());
+                            CodigosAdapter ma = ((CodigosAdapter) ((ListView) view.getParent().getParent()).getAdapter());
                             Codigos duplicado = new Codigos(cod.getmCod(),cod.getmDesc(),"",null,cod.getmIdSerial());
                             ma.getOriginal().add(position + 1,duplicado);
                             ma.clear();
@@ -197,13 +197,13 @@ public class MaterialAdapter extends ArrayAdapter<Codigos> {
         @Override
         protected void publishResults(CharSequence charSequence,FilterResults filterResults) {
             fitems = (ArrayList<Codigos>) filterResults.values;
-            //notifyDataSetChanged();
             clear();
             int count = fitems.size();
             for (int i = 0; i < count; i++) {
                 Codigos material = (Codigos) fitems.get(i);
                 add(material);
             }
+            notifyDataSetChanged();
         }
     }
 

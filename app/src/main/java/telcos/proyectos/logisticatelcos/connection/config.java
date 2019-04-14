@@ -10,4 +10,9 @@ public class config {
     public static final String GET_NODO = IP + PUERTO_HOST + CARPETA + "/obtener_nodos.php";
     public static final String GET_PREINVENTARIO = IP + PUERTO_HOST + CARPETA + "/obtener_estadoprep.php";
     public static final String INSERT_INVENT = IP + PUERTO_HOST + CARPETA + "/insertar_inventarios.php";
+
+    //LogIn
+    public static final String GET_USER = IP + PUERTO_HOST + CARPETA + "/obtener_pass.php";
+
+
 }
